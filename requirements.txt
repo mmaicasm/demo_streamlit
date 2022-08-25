@@ -6,4 +6,3 @@ google-auth
 google-auth-httplib2
 protobuf
 click==8
-utils
