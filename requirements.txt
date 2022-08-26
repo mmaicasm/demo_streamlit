@@ -1,5 +1,4 @@
 altair
 pandas
-protobuf
-click==8
+streamlit
 snowflake-snowpark-python
