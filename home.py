@@ -4,16 +4,10 @@ import streamlit as st
 #from vega_datasets import data
 
 from utils import db
+from utils.functions import space
 
 COMMENT_TEMPLATE_MD = """{} - {}
 > {}"""
-
-
-def space(num_lines=1):
-    """Adds empty lines to the Streamlit app."""
-    for _ in range(num_lines):
-        st.write("")
-
 
 st.set_page_config(layout="centered", page_icon="💬", page_title="Commenting app")
 
