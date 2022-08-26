@@ -1,73 +1,42 @@
-import socket
-
-import google_auth_httplib2
-import httplib2
 import pandas as pd
 import streamlit as st
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import HttpRequest
-
-socket.setdefaulttimeout(15 * 60)
-
-SCOPE = "https://www.googleapis.com/auth/spreadsheets"
-SPREADSHEET_ID = "1rkMVLvh3JrBq_tbi4Ho0qjCDAP3vYdNuWOEjYpkJLNU"
-SHEET_NAME = "Database"
-GSHEET_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}"
+from snowflake.snowpark.session import Session
 
 
 @st.experimental_singleton()
 def connect():
-    # Create a connection object.
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"],
-        scopes=[SCOPE],
-    )
+  # Parámetros de conexión
+  connection_parameters = {
+    "account": st.secrets["snowflake_account"],
+    "user": st.secrets["snowflake_user"],
+    "password": st.secrets["snowflake_password"],
+    "role": "SYSADMIN",
+    "database": "TEST_SNOWPARK",
+    "schema": "STREAMLIT",
+    "warehouse": "COMPUTE_WH"
+  }
+  
+  # Crear conexión
+  session = Session.builder.configs(connection_parameters).create()
+      
+  return session
 
-    # Create a new Http() object for every request
-    def build_request(http, *args, **kwargs):
-        new_http = google_auth_httplib2.AuthorizedHttp(
-            credentials, http=httplib2.Http()
-        )
-        return HttpRequest(new_http, *args, **kwargs)
+def collect(session) -> pd.DataFrame:
+  df = session.table("TB_COMMENTS")
+  df = df.select("NAME", "DATE", "COMMENT").to_pandas()
+  
+  return df
 
-    authorized_http = google_auth_httplib2.AuthorizedHttp(
-        credentials, http=httplib2.Http()
-    )
-    service = build(
-        "sheets",
-        "v4",
-        requestBuilder=build_request,
-        http=authorized_http,
-    )
-    gsheet_connector = service.spreadsheets()
-    return gsheet_connector
-
-
-def collect(gsheet_connector) -> pd.DataFrame:
-    values = (
-        gsheet_connector.values()
-        .get(
-            spreadsheetId=SPREADSHEET_ID,
-            range=f"{SHEET_NAME}!A:C",
-        )
-        .execute()
-    )
-
-    df = pd.DataFrame(values["values"])
-    df.columns = df.iloc[0]
-    df = df[1:]
-    return df
-
-
-def insert(gsheet_connector, row) -> None:
-    values = (
-        gsheet_connector.values()
-        .append(
-            spreadsheetId=SPREADSHEET_ID,
-            range=f"{SHEET_NAME}!A:C",
-            body=dict(values=row),
-            valueInputOption="USER_ENTERED",
-        )
-        .execute()
-    )
+def insert(session, name, date, comment) -> int:
+  if name:
+    st.write('test')
+    try:
+      session.sql(f"INSERT INTO TB_COMMENTS VALUES ('{name}', '{date}', '{comment}')").collect()
+      return 0
+    except:
+      #st.error(f"Error en insert de la fila -> ('{name}', '{date}', '{comment}')")
+      return 2
+  else:
+    st.write('test2')
+    #st.warning("Introduce tu nombre")
+    return 1
