@@ -1,5 +1,7 @@
-import pandas as pd
+# Streamlit
 import streamlit as st
+# Librerias necesarias
+import pandas as pd
 # Snowpark
 from snowflake.snowpark.session import Session
 

@@ -48,8 +48,8 @@ with st.expander("💬 Abrir comentarios"):
   with st.form("comment"):
     name = st.text_input("Nombre")
     comment = st.text_area("Commentario")
+    
     submit = st.form_submit_button("Añadir comentario")
-
     if submit:
       date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
       result = db.insert(conn, name, date, comment)
