@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+# Snowpark
 from snowflake.snowpark.session import Session
 
 
@@ -29,14 +30,10 @@ def collect(session) -> pd.DataFrame:
 
 def insert(session, name, date, comment) -> int:
   if name:
-    st.write('test')
     try:
       session.sql(f"INSERT INTO TB_COMMENTS VALUES ('{name}', '{date}', '{comment}')").collect()
       return 0
     except:
-      #st.error(f"Error en insert de la fila -> ('{name}', '{date}', '{comment}')")
       return 2
   else:
-    st.write('test2')
-    #st.warning("Introduce tu nombre")
     return 1
