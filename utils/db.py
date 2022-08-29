@@ -24,6 +24,19 @@ def connect():
       
   return session
 
+def available_roles(session) -> list:
+  df = session.sql("SELECT CURRENT_AVAILABLE_ROLES() AS ROLE").to_pandas()
+  roles = df['ROLE'][0]
+  lst = roles.strip('][').replace('"', '').split(', ')
+
+  return lst
+
+def available_wh(session) -> pd.DataFrame:
+  session.sql("SHOW WAREHOUSES").collect()
+  df = session.sql('SELECT "name" as NAME, "size" as SIZE FROM table(result_scan(last_query_id()))').to_pandas()
+
+  return df
+
 def collect(session) -> pd.DataFrame:
   df = session.table("TB_COMMENTS")
   df = df.select("NAME", "DATE", "COMMENT").to_pandas()

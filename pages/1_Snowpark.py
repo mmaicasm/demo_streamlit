@@ -30,7 +30,6 @@ connection_parameters = {
   "schema": "STREAMLIT",
   "warehouse": "COMPUTE_WH"
 }"""
-
 st.code(text, language = "yaml")
 
 text = """
@@ -41,7 +40,6 @@ def connect():
   
 session = connect()
 """
-
 st.code(text, language = "python")
 
 # QUERY
