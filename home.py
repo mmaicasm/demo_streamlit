@@ -2,7 +2,7 @@
 import streamlit as st
 # Librerias necesarias
 import time
-# Funciones necesarias 
+# Funciones necesarias
 from utils import db
 
 # Formato de página
@@ -18,7 +18,13 @@ st.set_page_config(
   }
 )
 st.title('Login')
-st.subheader('Conexión a Snowflake a traves de Snowpark')
+st.subheader('Conexión a Snowflake utilizando Snowpark')
+
+# Recuperar singletons
+if 'role' in st.session_state:
+  session = db.connect()
+  role_list = db.available_roles(session)
+  role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], label= 'Rol')
 
 # Widget manual
 with st.form(key = "login"):
@@ -34,7 +40,6 @@ with st.form(key = "login"):
       # Crear sesión
       with st.spinner('Conectando a Snowflake...'):
         session = db.connect()
-        time.sleep(2)
       
       # Ocultar índices de tablas
       hide_table_row_index = """
@@ -48,8 +53,15 @@ with st.form(key = "login"):
       # Informar conexión correcta
       st.success('Sesión confirmada!')
       st.snow()
-      # Widgets en barra lateral
-      role = st.sidebar.selectbox(options = db.available_roles(session), label= 'Rol')
+      
+      # Obtener roles disponibles
+      role_list = db.available_roles(session)
+      
+      # Widget en barra lateral
+      #role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], on_change = db.refresh_role, args=(new_project, ), label= 'Rol')
+      role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], label= 'Rol')
+      st.session_state['role'] = role
+      st.session_state['role_index'] = role_list.index(role)
       
       # Mostrar parámetros de la sesión
       st.write('Parámetros de la sesión:')
