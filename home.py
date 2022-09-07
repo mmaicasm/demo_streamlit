@@ -20,7 +20,7 @@ st.set_page_config(
 st.title('Login')
 st.subheader('Conexión a Snowflake utilizando Snowpark')
 
-# Recuperar singletons
+# Recuperar Widget de la barra lateral
 if 'role' in st.session_state:
   session = db.connect()
   role_list = db.available_roles(session)
@@ -57,11 +57,11 @@ with st.form(key = "login"):
       # Obtener roles disponibles
       role_list = db.available_roles(session)
       
-      # Widget en barra lateral
-      #role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], on_change = db.refresh_role, args=(new_project, ), label= 'Rol')
-      role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], label= 'Rol')
-      st.session_state['role'] = role
-      st.session_state['role_index'] = role_list.index(role)
+      # Crear widget en barra lateral
+      if 'role' not in st.session_state:
+        role = st.sidebar.selectbox(options = role_list, index = st.session_state['role_index'], label= 'Rol')
+        st.session_state['role'] = role
+        st.session_state['role_index'] = role_list.index(role)
       
       # Mostrar parámetros de la sesión
       st.write('Parámetros de la sesión:')

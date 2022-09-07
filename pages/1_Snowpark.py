@@ -3,7 +3,7 @@ import streamlit as st
 # Snowpark
 from snowflake.snowpark.session import Session
 
-# Set page config and title
+# Formato de página
 st.set_page_config(
   page_title = "Snowpark",
   page_icon = "🧊",
@@ -12,7 +12,7 @@ st.set_page_config(
   menu_items = {
     'Get Help': 'https://developers.snowflake.com',
     'Report a bug': None,
-    'About': "This is an *extremely* cool app powered by Snowpark for Python, Streamlit, and the *amazing* Miguel Maicas"
+    'About': "This is an *extremely* cool app made by Miguel Maicas and powered by Snowpark for Python and Streamlit"
   }
 )
 st.title('Snowpark')

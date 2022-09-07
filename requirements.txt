@@ -2,3 +2,4 @@ altair
 pandas
 streamlit
 snowflake-snowpark-python
+st_aggrid
