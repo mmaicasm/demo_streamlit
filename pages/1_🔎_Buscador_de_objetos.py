@@ -2,7 +2,6 @@
 import streamlit as st
 # Snowpark
 from snowflake.snowpark.session import Session
-from snowflake.snowpark.functions import avg, sum, col, lit, in_
 # Librerias necesarias
 import pandas as pd
 from st_aggrid import AgGrid
@@ -27,10 +26,6 @@ st.title('Buscador de objetos')
 #st.header("Cabecera")
 #st.subheader('Subcabecera')
 st.markdown('Herramienta para buscar y analizar objetos')
-  
-# Variables
-i1 = 0
-i2 = 0
 
 # Funciones
 @st.experimental_memo
