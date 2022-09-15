@@ -13,7 +13,7 @@ from utils import db
 # Formato de página
 st.set_page_config(
   page_title = "Explorador de permisos",
-  page_icon = ":closed_lock_with_key:",
+  page_icon = "🔐",
   layout = "wide",
   initial_sidebar_state = "auto",
   menu_items = {

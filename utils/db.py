@@ -16,14 +16,14 @@ connection_parameters = {
   "warehouse": "COMPUTE_WH"
 }
 
+# Funciones con memoria
 @st.experimental_singleton()
 def connect():
   session = Session.builder.configs(connection_parameters).create()
   return session
 
-@st.experimental_singleton()
+@st.experimental_memo()
 def available_roles(_session) -> list:
-  # Listado de roles
   df = _session.sql("SELECT CURRENT_AVAILABLE_ROLES() AS ROLE").to_pandas()
   roles = df['ROLE'][0]
   lst = roles.strip('][').replace('"', '').strip().split(', ')
@@ -32,6 +32,15 @@ def available_roles(_session) -> list:
   
   return lst
 
+@st.experimental_memo() PENDIENTE DE PROBAR 
+def show_databases(_session) -> list:
+  _session.sql("SHOW TERSE DATABASES").collect()
+  df = _session.sql("SELECT * FROM table(result_scan(last_query_id()))").to_pandas()
+  lst = df['name']
+  
+  return lst
+
+# Otras funciones
 def refresh_role(list, role):
   # Rol por defecto
   if role in list:
