@@ -32,26 +32,12 @@ os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
 
 # Conexión
 session = db.connect()
+df_schemas = db.show_schemas(session, st.session_state['role'])
 
+# Listados
+db_list = set(df_schemas['DATABASE_NAME'])
 
 # Funciones
-@st.experimental_memo
-def db_list():
-  session.sql(f'SHOW DATABASES').collect()
-  df = session.sql('SELECT "name" as DATABASE FROM table(result_scan(last_query_id()))').to_pandas()
-  ls = df['DATABASE'].to_list()
-  
-  return ls
-
-@st.experimental_memo
-def schema_list(db):
-  session.sql(f'SHOW SCHEMAS IN {db}').collect()
-  df = session.sql('SELECT "name" as SCHEMA FROM table(result_scan(last_query_id()))').to_pandas()
-  ls = df['SCHEMA'].to_list()
-  ls.insert(0, '') # Valor inicial vacio
-  
-  return ls
-
 @st.experimental_memo
 def table_list(db, schema):
   if schema:
@@ -115,18 +101,18 @@ db, schema, object = st.columns(3)
 
 # Widget de Database
 with db:
-  w1 = st.selectbox(options = db_list(), label = 'Database')
+  w1 = st.selectbox(options = db_list, label = 'Database')
 
 # Widget de Schema
 with schema:
-  w2 = st.selectbox(options = schema_list(w1), label = 'Schema')
+  w2 = st.selectbox(options = df_schemas[['DATABASE_NAME'] == w1], label = 'Schema')
 
 # Widget de Table
 with object:
   w3 = st.selectbox(options = table_list(w1, w2), help = 'Dejar vacio si se quiere buscar a nivel de esquema', label = 'Table')
 
 # Botón para generar permisos
-w4 = st.button(key = 'w41', label = 'Generar')
+w4 = st.button(key = 'w4', label = 'Generar')
 if w4:
   if w2:
     if w3:

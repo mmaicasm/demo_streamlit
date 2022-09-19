@@ -27,11 +27,19 @@ space(1)
 
 # Comments part
 conn = db.connect()
-comments = db.collect(conn)
+comments = db.collect_comments(conn)
 
 # Template
 COMMENT_TEMPLATE_MD = """{} - {}
 > {}"""
+
+# Funciones
+@st.experimental_memo
+def current_user(_session) -> str:
+  df = _session.sql(f'SELECT current_user() as USER').collect()
+  user = df['USER'][0]
+  
+  return user
 
 with st.expander("💬 Abrir comentarios"):
 
@@ -46,8 +54,8 @@ with st.expander("💬 Abrir comentarios"):
   # Insert comment
   st.write("**Añade tu comentario:**")
   with st.form("comment"):
-    name = st.text_input("Nombre")
-    comment = st.text_area("Commentario")
+    name = st.text_input(value = current_user(conn), label = "Nombre")
+    comment = st.text_area(label = "Commentario")
     
     submit = st.form_submit_button("Añadir comentario")
     if submit:

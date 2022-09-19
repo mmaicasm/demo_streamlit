@@ -32,13 +32,12 @@ def available_roles(_session) -> list:
   
   return lst
 
-@st.experimental_memo() PENDIENTE DE PROBAR 
-def show_databases(_session) -> list:
-  _session.sql("SHOW TERSE DATABASES").collect()
-  df = _session.sql("SELECT * FROM table(result_scan(last_query_id()))").to_pandas()
-  lst = df['name']
+@st.experimental_memo()
+def show_schemas(_session, rol) -> pd.DataFrame:
+  _session.sql("SHOW TERSE SCHEMAS").collect()
+  df = _session.sql("SELECT \"name\" as NAME, \"database_name\" as DATABASE_NAME FROM table(result_scan(last_query_id()))").to_pandas()
   
-  return lst
+  return df
 
 # Otras funciones
 def refresh_role(list, role):
@@ -50,7 +49,7 @@ def refresh_role(list, role):
     st.session_state['role'] = list[0]
     st.session_state['role_index'] = 0
 
-def collect(session) -> pd.DataFrame:
+def collect_comments(session) -> pd.DataFrame:
   df = session.table("TB_COMMENTS")
   df = df.select("NAME", "DATE", "COMMENT").to_pandas()
   
