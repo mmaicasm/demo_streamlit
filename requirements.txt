@@ -3,3 +3,4 @@ pandas
 streamlit
 snowflake-snowpark-python
 streamlit-aggrid
+click<=8.0.4

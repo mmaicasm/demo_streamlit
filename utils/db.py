@@ -24,8 +24,11 @@ def connect():
 
 @st.experimental_memo()
 def available_roles(_session) -> list:
+  st.write('1')
   df = _session.sql("SELECT CURRENT_AVAILABLE_ROLES() AS ROLE").to_pandas()
+  st.write('2')
   roles = df['ROLE'][0]
+  st.write('3')
   lst = roles.strip('][').replace('"', '').strip().split(', ')
   
   refresh_role(lst, connection_parameters['role'])
