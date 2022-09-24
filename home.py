@@ -55,7 +55,9 @@ with st.form(key = "login"):
       st.snow()
       
       # Obtener roles disponibles
+      st.write('PREVIO')
       role_list = db.available_roles(session)
+      st.write('POST')
       
       # Crear widget en barra lateral
       if 'role' not in st.session_state:
