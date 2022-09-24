@@ -1,6 +1,5 @@
 altair
 pandas
-streamlit
+streamlit>=1.8.1
 snowflake-snowpark-python
 streamlit-aggrid
-click<=8.0.4
