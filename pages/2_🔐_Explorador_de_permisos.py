@@ -38,7 +38,7 @@ df_schemas = db.show_schemas(session, st.session_state['role'])
 db_list = set(df_schemas['DATABASE_NAME'])
 
 # Funciones
-@st.experimental_memo
+@st.experimental_memo(show_spinner = False)
 def table_list(db, schema):
   if schema:
     session.sql(f'SHOW TABLES IN SCHEMA {db}.{schema}').collect()

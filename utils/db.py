@@ -12,30 +12,27 @@ connection_parameters = {
   "password": st.secrets["snowflake_password"],
   "role": "SYSADMIN",
   "database": "TEST_SNOWPARK",
-  "schema": "STREAMLIT",
+  "schema": "CITIBIKE",
   "warehouse": "COMPUTE_WH"
 }
 
 # Funciones con memoria
-@st.experimental_singleton()
+@st.experimental_singleton(show_spinner = False)
 def connect():
   session = Session.builder.configs(connection_parameters).create()
   return session
 
-@st.experimental_memo()
+@st.experimental_memo(show_spinner = False)
 def available_roles(_session) -> list:
-  st.write('1')
   df = _session.sql("SELECT CURRENT_AVAILABLE_ROLES() AS ROLE").to_pandas()
-  st.write('2')
   roles = df['ROLE'][0]
-  st.write('3')
   lst = roles.strip('][').replace('"', '').strip().split(', ')
   
   refresh_role(lst, connection_parameters['role'])
   
   return lst
 
-@st.experimental_memo()
+@st.experimental_memo(show_spinner = False)
 def show_schemas(_session, rol) -> pd.DataFrame:
   _session.sql("SHOW TERSE SCHEMAS").collect()
   df = _session.sql("SELECT \"name\" as NAME, \"database_name\" as DATABASE_NAME FROM table(result_scan(last_query_id()))").to_pandas()

@@ -18,7 +18,7 @@ st.set_page_config(
   }
 )
 st.title('Login')
-st.subheader('Conexión a Snowflake utilizando Snowpark')
+st.subheader('Conexión a Snowflake mediante Snowpark')
 
 # Recuperar Widget de la barra lateral
 if 'role' in st.session_state:
@@ -29,7 +29,7 @@ if 'role' in st.session_state:
 # Widget manual
 with st.form(key = "login"):
   
-  entorno = st.radio(options = ['PRO','PRE','DEV'], disabled = True, label = 'Entorno')
+  #entorno = st.radio(options = ['PRO','PRE','DEV'], disabled = True, label = 'Entorno')
   user = st.text_input(placeholder = 'usuario@hiberus.com', label = 'Usuario')
   password = st.text_input(type = 'password', label = 'Contraseña')
   
@@ -55,9 +55,7 @@ with st.form(key = "login"):
       st.snow()
       
       # Obtener roles disponibles
-      st.write('PREVIO')
       role_list = db.available_roles(session)
-      st.write('POST')
       
       # Crear widget en barra lateral
       if 'role' not in st.session_state:

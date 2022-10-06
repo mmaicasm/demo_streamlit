@@ -28,7 +28,7 @@ st.title('Buscador de objetos')
 st.markdown('Herramienta para buscar y analizar objetos')
 
 # Funciones
-@st.experimental_memo
+@st.experimental_memo(show_spinner = False)
 def search_object(type, object):
   df = pd.DataFrame()
   # Tablas

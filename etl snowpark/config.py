@@ -1,8 +1,7 @@
 # %%
 # Librerias necesarias
-import pandas as pd
-# Snowpark
 from snowflake.snowpark.session import Session
+
 # Datos secretos de conexión
 from secrets import login_info
 

@@ -34,7 +34,7 @@ COMMENT_TEMPLATE_MD = """{} - {}
 > {}"""
 
 # Funciones
-@st.experimental_memo
+@st.experimental_memo(show_spinner = False)
 def current_user(_session) -> str:
   df = _session.sql(f'SELECT current_user() as USER').collect()
   user = df['USER'][0]
