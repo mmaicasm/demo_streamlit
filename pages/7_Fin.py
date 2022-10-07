@@ -23,3 +23,5 @@ w1 = st.button('Click para acabar')
 if w1:
   st.balloons()
   st.snow()
+  
+  st.image('https://www.amigoszaragoza.com/cacheimagenes/fotosblog600-loch-ness.jpg')

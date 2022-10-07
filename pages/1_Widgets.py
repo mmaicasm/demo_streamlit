@@ -28,13 +28,12 @@ session = db.connect()
 
 st.button('Click aquí')
 st.checkbox('Aceptar')
-st.multiselect('Escoge uno', options = ['Gato', 'Perro']) #selectbox multiselect
+st.radio(label = 'Escoge uno', options = ['Gato', 'Perro']) #selectbox multiselect
 
 space(1)
 
-st.text_input('Introduce un texto')
-st.number_input('Elige una fecha')
-st.date_input('Elige una fecha')
+st.text_input(label = 'Introduce un texto')
+st.date_input(label = 'Elige una fecha')
 
 space(10)
 

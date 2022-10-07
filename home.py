@@ -29,7 +29,9 @@ if 'role' in st.session_state:
 # Widget manual
 with st.form(key = "login"):
   
-  #entorno = st.radio(options = ['PRO','PRE','DEV'], disabled = True, label = 'Entorno')
+  entorno = st.radio(options = ['PRO','PRE','DEV'], disabled = True, label = 'Entorno') # SIN USO
+  #st.image('https://www.mobilitycity.es/img/refs/entidades/hiberus-tecnologia.gif', width = 150)
+  
   user = st.text_input(placeholder = 'usuario@hiberus.com', label = 'Usuario')
   password = st.text_input(type = 'password', label = 'Contraseña')
   
@@ -69,3 +71,5 @@ with st.form(key = "login"):
       
     else:
       st.error("Introduce tu usuario y contraseña")
+      
+    
