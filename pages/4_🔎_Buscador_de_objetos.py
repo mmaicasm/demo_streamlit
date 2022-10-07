@@ -23,8 +23,6 @@ st.set_page_config(
   }
 )
 st.title('Buscador de objetos')
-#st.header("Cabecera")
-#st.subheader('Subcabecera')
 st.markdown('Herramienta para buscar y analizar objetos')
 
 # Funciones
@@ -33,25 +31,25 @@ def search_object(type, object):
   df = pd.DataFrame()
   # Tablas
   if 'TABLE' in type:
-    session.sql(f"SHOW TERSE TABLES LIKE '%{object}%' IN ACCOUNT").collect()
+    session.sql(f"SHOW TERSE TABLES LIKE '%{object}%' IN DATABASE TEST_SNOWPARK").collect()
     df1 = session.sql('SELECT "kind" as KIND, "database_name" as DATABASE_NAME, "schema_name" as SCHEMA_NAME, "name" as NAME  FROM table(result_scan(last_query_id()))').to_pandas()
     df = pd.concat([df, df1], ignore_index = True)
     
   # Vistas
   if 'VIEW' in type:
-    session.sql(f"SHOW TERSE VIEWS LIKE '%{object}%' IN ACCOUNT").collect()
+    session.sql(f"SHOW TERSE VIEWS LIKE '%{object}%' IN DATABASE TEST_SNOWPARK").collect()
     df2 = session.sql('SELECT "kind" as KIND, "database_name" as DATABASE_NAME, "schema_name" as SCHEMA_NAME, "name" as NAME  FROM table(result_scan(last_query_id()))').to_pandas()
     df = pd.concat([df, df2], ignore_index = True)
   
   # Tasks
   if 'TASK' in type:
-    session.sql(f"SHOW TERSE TASKS LIKE '%{object}%' IN ACCOUNT").collect()
+    session.sql(f"SHOW TERSE TASKS LIKE '%{object}%' IN DATABASE TEST_SNOWPARK").collect()
     df3 = session.sql(f'SELECT \'TASK\' as KIND, "database_name" as DATABASE_NAME, "schema_name" as SCHEMA_NAME, "name" as NAME  FROM table(result_scan(last_query_id()))').to_pandas()
     df = pd.concat([df, df3], ignore_index = True)
   
   # Streams
   if 'STREAM' in type:
-    session.sql(f"SHOW TERSE STREAMS LIKE '%{object}%' IN ACCOUNT").collect()
+    session.sql(f"SHOW TERSE STREAMS LIKE '%{object}%' IN DATABASE TEST_SNOWPARK").collect()
     df4 = session.sql(f'SELECT \'STREAM\' as KIND, "database_name" as DATABASE_NAME, "schema_name" as SCHEMA_NAME, "name" as NAME  FROM table(result_scan(last_query_id()))').to_pandas()
     df = pd.concat([df, df4], ignore_index = True)
   
@@ -65,7 +63,7 @@ w1 = st.multiselect(options = ['TABLE', 'VIEW', 'TASK', 'STREAM'], help = 'Cada 
 w2 = st.text_input(placeholder = 'Nombre del objeto', label = 'Objeto')
 
 # Solo refrescar si hay texto
-if w1 and w2:
+if w1:
   # Buscar objeto
   with st.spinner(f'Buscando en Snowflake...'):
     df = search_object(w1, w2)
@@ -73,7 +71,7 @@ if w1 and w2:
   # Añadimos control por selección individual
   gb = GridOptionsBuilder.from_dataframe(df)
   gb.configure_selection(selection_mode = "single", use_checkbox = False)
-  #gb.configure_grid_options(domLayout = 'autoHeight') HACE COSAS RARAS PARA MUCHAS FILAS
+  gb.configure_grid_options(domLayout = 'autoHeight') # CUIDADO con muchas filas
   gridOptions = gb.build()
   
   grid_return = AgGrid(df, 

@@ -23,8 +23,6 @@ st.set_page_config(
   }
 )
 st.title('Explorador de permisos')
-#st.header("Cabecera")
-#st.subheader('Subcabecera')
 st.markdown('Herramienta para analizar permisos a nivel de esquema/tabla o de usuario')
 
 # Necesario para exportar
@@ -35,7 +33,7 @@ session = db.connect()
 df_schemas = db.show_schemas(session, st.session_state['role'])
 
 # Listados
-db_list = set(df_schemas['DATABASE_NAME'])
+db_list = ['TEST_SNOWPARK']
 
 # Funciones
 @st.experimental_memo(show_spinner = False)
@@ -95,7 +93,6 @@ def permisos(db, schema, object):
   else:
     export = st.download_button(data = graph.pipe(format='svg'), file_name = f'diagrama_permisos - {schema}.svg', mime = 'image/svg+xml', label = 'Exportar')
 
-
 # Columnas
 db, schema, object = st.columns(3)
 
@@ -105,7 +102,7 @@ with db:
 
 # Widget de Schema
 with schema:
-  w2 = st.selectbox(options = df_schemas[['DATABASE_NAME'] == w1], label = 'Schema')
+  w2 = st.selectbox(options = df_schemas[df_schemas['DATABASE_NAME'] == w1]['NAME'], label = 'Schema')
 
 # Widget de Table
 with object:
