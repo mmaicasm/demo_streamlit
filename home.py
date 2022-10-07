@@ -7,7 +7,7 @@ from utils import db
 
 # Formato de página
 st.set_page_config(
-  page_title = "Login",
+  page_title = "Home",
   page_icon = ":snowflake:",
   layout = "wide",
   initial_sidebar_state = "auto",
@@ -17,7 +17,7 @@ st.set_page_config(
     'About': "This is an *extremely* cool app made by Miguel Maicas and powered by Snowpark for Python and Streamlit"
   }
 )
-st.title('Login')
+st.title('Home')
 st.subheader('Conexión a Snowflake mediante Snowpark')
 
 # Recuperar Widget de la barra lateral
