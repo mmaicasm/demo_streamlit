@@ -39,4 +39,4 @@ space(2)
 df2 = session.sql('SELECT USERTYPE as USUARIO, COUNT(*) AS VIAJES FROM TRIPS GROUP BY USERTYPE').to_pandas()
 
 # Barras
-st.line_chart(data = df2, x = 'USUARIO', y = 'VIAJES')
+st.bar_chart(data = df2, x = 'USUARIO', y = 'VIAJES')

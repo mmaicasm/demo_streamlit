@@ -34,14 +34,14 @@ session.sql(f"SHOW TABLES").collect()
 
 # Tabla
 df1 = session.sql('SELECT * FROM table(result_scan(last_query_id()))').to_pandas()
-st.write(df1)
+#st.write(df1)
 
 space(2)
 
-#tabla = st.selectbox(options = df1['name'], label = 'Tabla')
+tabla = st.selectbox(options = df1['name'], label = 'Tabla')
 
-#df2 = session.sql('SELECT * FROM ' + tabla + ' LIMIT 1000').to_pandas()
-#st.dataframe(df2)
+df2 = session.sql('SELECT * FROM ' + tabla + ' LIMIT 1000').to_pandas()
+st.dataframe(df2)
 
 # Grid
-#grid = AgGrid(df2)
+grid = AgGrid(df2)
